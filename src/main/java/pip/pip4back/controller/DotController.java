@@ -1,5 +1,6 @@
 package pip.pip4back.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import pip.pip4back.service.ValidationService;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/dots")
 public class DotController {
@@ -28,17 +30,17 @@ public class DotController {
     public ResponseEntity<Dot> createDot(@Valid @RequestBody DotDto dotDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = validationService.combineBindingResultErrors(bindingResult);
-            System.out.println(errors);
-            return new ResponseEntity<Dot>(new Dot(), HttpStatus.BAD_REQUEST);
+            log.info(errors);
+            return new ResponseEntity<>(new Dot(), HttpStatus.BAD_REQUEST);
         } else {
             Dot dot = dotService.addDot(dotDto);
-            return new ResponseEntity<Dot>(dot, HttpStatus.OK);
+            return new ResponseEntity<>(dot, HttpStatus.OK);
         }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Dot>> showAllDots() {
-        return new ResponseEntity<List<Dot>>(dotService.showAllDots(), HttpStatus.OK);
+        return new ResponseEntity<>(dotService.showAllDots(), HttpStatus.OK);
     }
 
 }
